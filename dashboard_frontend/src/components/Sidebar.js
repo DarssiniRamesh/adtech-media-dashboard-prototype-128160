@@ -14,7 +14,8 @@ import {
   Activity,
   HelpCircle,
   LogOut,
-  SlidersHorizontal
+  SlidersHorizontal,
+  X
 } from 'lucide-react';
 
 // PUBLIC_INTERFACE
@@ -93,14 +94,25 @@ function Sidebar({ currentView, setCurrentView, isOpen, onClose }) {
       >
         {/* Sidebar Header */}
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <div className="flex items-center justify-center w-10 h-10 bg-primary-blue rounded-lg">
-              <Activity size={24} className="text-white" />
+          <div className="flex items-center justify-between">
+            <div className="sidebar-logo">
+              <div className="flex items-center justify-center w-10 h-10 bg-primary-blue rounded-lg">
+                <Activity size={24} className="text-white" />
+              </div>
+              <div>
+                <div className="font-bold text-lg">AdTech</div>
+                <div className="text-sm text-gray-500">Analytics</div>
+              </div>
             </div>
-            <div>
-              <div className="font-bold text-lg">AdTech</div>
-              <div className="text-sm text-gray-500">Analytics</div>
-            </div>
+            {/* Mobile close button */}
+            <button 
+              className="button button-small button-secondary lg:hidden"
+              onClick={onClose}
+              aria-label="Close menu"
+              title="Close"
+            >
+              <X size={16} />
+            </button>
           </div>
         </div>
 

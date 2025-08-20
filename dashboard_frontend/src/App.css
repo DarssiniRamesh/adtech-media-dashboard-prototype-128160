@@ -492,10 +492,42 @@ body.no-scroll {
 @media (max-width: 768px) {
   .dashboard-content { padding: var(--space-4); }
   .grid-cols-4, .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
+
+  /* Header stacks on small screens */
   .header { padding: var(--space-3) var(--space-4); }
+  .header-content { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: var(--space-3);
+  }
+  .header-left { width: 100%; }
   .header-title { font-size: var(--text-2xl); }
+  .header-actions { 
+    width: 100%; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+    gap: var(--space-3);
+  }
+  .header-actions .button { flex: 0 0 auto; }
+  .time-selector { flex: 0 0 auto; }
+
   .metric-value { font-size: var(--text-3xl); }
   .chart-container { height: 300px; }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  /* Narrower drawer so content remains visible beside overlay edges */
+  .sidebar { width: 85vw; }
+
+  /* Reduce heading size slightly */
+  .header-title { font-size: var(--text-xl); }
+
+  /* Compact charts further on very small screens */
+  .chart-container { height: 260px; }
+
+  /* Hide time range selector to prevent header overflow on tiny devices */
+  .time-selector { display: none; }
 }
 
 /* Simple utility classes used by components */

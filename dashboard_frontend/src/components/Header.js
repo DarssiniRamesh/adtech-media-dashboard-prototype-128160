@@ -38,11 +38,11 @@ function Header({ title, subtitle, onMenuClick }) {
       <div className="header-content">
         <div className="header-left">
           <button 
-            className="button button-secondary lg:hidden mr-4"
+            className="button button-secondary hamburger-btn lg:hidden mr-4"
             onClick={onMenuClick}
             aria-label="Toggle menu"
           >
-            <Menu size={20} />
+            <Menu size={24} />
           </button>
           
           <div>

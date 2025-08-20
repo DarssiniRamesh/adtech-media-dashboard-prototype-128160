@@ -194,7 +194,7 @@ export const chartColors = {
   }
 };
 
-export default {
+const dataUtils = {
   formatCurrency,
   formatNumber,
   formatPercentage,
@@ -215,3 +215,5 @@ export default {
   performanceThresholds,
   chartColors
 };
+
+export default dataUtils;

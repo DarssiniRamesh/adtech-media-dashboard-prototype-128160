@@ -8,6 +8,10 @@ import DashboardOverview from './components/DashboardOverview';
 import Analytics from './components/Analytics';
 import Campaigns from './components/Campaigns';
 import Reports from './components/Reports';
+import Audiences from './components/Audiences';
+import Geography from './components/Geography';
+import Devices from './components/Devices';
+import Creatives from './components/Creatives';
 
 // PUBLIC_INTERFACE
 function App() {
@@ -25,6 +29,14 @@ function App() {
         return <Campaigns />;
       case 'reports':
         return <Reports />;
+      case 'audiences':
+        return <Audiences />;
+      case 'geography':
+        return <Geography />;
+      case 'devices':
+        return <Devices />;
+      case 'creatives':
+        return <Creatives />;
       default:
         return <DashboardOverview />;
     }
@@ -41,6 +53,14 @@ function App() {
         return 'Campaigns';
       case 'reports':
         return 'Reports';
+      case 'audiences':
+        return 'Audience Insights';
+      case 'geography':
+        return 'Geographic Performance';
+      case 'devices':
+        return 'Device Analytics';
+      case 'creatives':
+        return 'Creative Performance';
       default:
         return 'Dashboard Overview';
     }
@@ -57,6 +77,14 @@ function App() {
         return 'Campaign management and optimization';
       case 'reports':
         return 'Generate and view detailed reports';
+      case 'audiences':
+        return 'Audience segmentation and demographic analysis';
+      case 'geography':
+        return 'Geographic performance breakdown and insights';
+      case 'devices':
+        return 'Device-specific performance metrics and trends';
+      case 'creatives':
+        return 'Creative asset performance and optimization';
       default:
         return 'Media performance insights and key metrics at a glance';
     }

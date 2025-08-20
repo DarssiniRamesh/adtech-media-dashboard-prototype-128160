@@ -4,7 +4,7 @@ import PerformanceChart from './charts/PerformanceChart';
 import PlatformChart from './charts/PlatformChart';
 import DeviceChart from './charts/DeviceChart';
 import GeoChart from './charts/GeoChart';
-import { formatCurrency, formatNumber, formatPercentage } from '../data/dataUtils';
+import { formatCurrency, formatPercentage } from '../data/dataUtils';
 
 // PUBLIC_INTERFACE
 function Analytics() {

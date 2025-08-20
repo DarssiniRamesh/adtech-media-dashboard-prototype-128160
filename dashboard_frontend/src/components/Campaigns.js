@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Play, Pause, Edit, TrendingUp, TrendingDown, Target } from 'lucide-react';
+import { Play, Pause, Edit, TrendingUp, Target } from 'lucide-react';
 import mockData from '../data/mockData';
-import { formatCurrency, formatNumber, formatPercentage } from '../data/dataUtils';
+import { formatCurrency, formatPercentage } from '../data/dataUtils';
 import CampaignTable from './CampaignTable';
 
 // PUBLIC_INTERFACE
 function Campaigns() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterPlatform, setFilterPlatform] = useState('all');
-  const { campaigns, platformBreakdown } = mockData;
+  // eslint-disable-next-line no-unused-vars
+  const { campaigns } = mockData;
 
   // PUBLIC_INTERFACE
   const getFilteredCampaigns = () => {

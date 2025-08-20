@@ -11,7 +11,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { formatCurrency, formatNumber } from '../../data/dataUtils';
+import { formatCurrency } from '../../data/dataUtils';
 
 ChartJS.register(
   CategoryScale,

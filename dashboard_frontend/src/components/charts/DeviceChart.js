@@ -9,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { formatCurrency, formatPercentage } from '../../data/dataUtils';
+import { formatCurrency } from '../../data/dataUtils';
 
 ChartJS.register(
   CategoryScale,

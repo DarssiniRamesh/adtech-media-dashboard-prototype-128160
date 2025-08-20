@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Download, Calendar, FileText, BarChart3, PieChart, TrendingUp } from 'lucide-react';
+import { Download, FileText, BarChart3, PieChart, TrendingUp } from 'lucide-react';
 import mockData from '../data/mockData';
-import { formatCurrency, formatNumber } from '../data/dataUtils';
+import { formatCurrency } from '../data/dataUtils';
 
 // PUBLIC_INTERFACE
 function Reports() {

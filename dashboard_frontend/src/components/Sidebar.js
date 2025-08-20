@@ -71,17 +71,26 @@ function Sidebar({ currentView, setCurrentView, isOpen, onClose }) {
     return section ? section.items.length : 0;
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
+
   return (
     <>
       {/* Mobile Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="sidebar-overlay lg:hidden"
           onClick={onClose}
+          aria-hidden="true"
         />
       )}
       
-      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <aside
+        className={`sidebar ${isOpen ? 'open' : ''}`}
+        role={isMobile ? 'dialog' : 'complementary'}
+        aria-modal={isMobile && isOpen ? 'true' : 'false'}
+        aria-label="Primary navigation"
+        tabIndex={isMobile && isOpen ? 0 : -1}
+      >
         {/* Sidebar Header */}
         <div className="sidebar-header">
           <div className="sidebar-logo">

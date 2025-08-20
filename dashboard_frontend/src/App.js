@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // Import components (we'll create these)
@@ -19,6 +19,29 @@ function App() {
   /** Root view selection (no router for simplicity). */
   const [currentView, setCurrentView] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Lock body scroll when the sidebar is open on small screens
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 1024;
+    if (isMobile && sidebarOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    // Cleanup on unmount
+    return () => document.body.classList.remove('no-scroll');
+  }, [sidebarOpen]);
+
+  // Close sidebar on Escape key (accessibility)
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   // PUBLIC_INTERFACE
   /** Render the view component for the current selection. */

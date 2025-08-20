@@ -1,25 +1,66 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import mockData from '../data/mockData';
 import PerformanceChart from './charts/PerformanceChart';
 import PlatformChart from './charts/PlatformChart';
 import DeviceChart from './charts/DeviceChart';
 import GeoChart from './charts/GeoChart';
+import ChannelWaveChart from './charts/ChannelWaveChart';
+import ChannelAttributionChart from './charts/ChannelAttributionChart';
+import PredictedActualClusterChart from './charts/PredictedActualClusterChart';
+import ModelFitChart from './charts/ModelFitChart';
 import { formatCurrency, formatPercentage } from '../data/dataUtils';
 
 // PUBLIC_INTERFACE
 function Analytics() {
   const [activeTab, setActiveTab] = useState('performance');
-  const { 
-    timeSeriesData, 
-    platformBreakdown, 
-    deviceBreakdown, 
+  const {
+    timeSeriesData,
+    platformBreakdown,
+    deviceBreakdown,
     geographicBreakdown,
-    ageGroupBreakdown 
+    ageGroupBreakdown
   } = mockData;
+
+  // Build channel waves from platforms for demo
+  const channelWaves = useMemo(() => {
+    const labels = timeSeriesData.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    const sumSpend = platformBreakdown.reduce((s, p) => s + p.spend, 0);
+    const getScale = (platforms) => platforms.reduce((s, p) => {
+      const entry = platformBreakdown.find(x => x.platform === p);
+      return s + (entry ? entry.spend : 0);
+    }, 0) / sumSpend;
+
+    // Channels and their platform grouping
+    const channels = {
+      Search: ['google'],
+      Social: ['facebook', 'instagram', 'tiktok'],
+      Professional: ['linkedin'],
+      Other: platformBreakdown
+        .map(p => p.platform)
+        .filter(p => !['google', 'facebook', 'instagram', 'tiktok', 'linkedin'].includes(p))
+    };
+
+    // Generate wave data per channel using scaled base and smooth oscillation
+    const waves = {};
+    const baseSeries = timeSeriesData.map(d => d.spend); // use spend as base oscillation reference
+    Object.keys(channels).forEach((ch, idx) => {
+      const scale = Math.max(0.12, getScale(channels[ch]));
+      waves[ch] = baseSeries.map((v, i) => {
+        const angle = (i / baseSeries.length) * Math.PI * 2;
+        const jitter = Math.sin(angle + idx * 0.8) * 0.12 + Math.cos(angle * 0.5 + idx) * 0.08;
+        return Math.max(0, Math.round(v * scale * (0.6 + jitter)));
+      });
+    });
+
+    return { labels, waves };
+  }, [timeSeriesData, platformBreakdown]);
 
   const tabs = [
     { id: 'performance', label: 'Performance' },
     { id: 'platforms', label: 'Platforms' },
+    { id: 'channels', label: 'Channels' },
+    { id: 'attribution', label: 'Attribution' },
+    { id: 'model', label: 'Model' },
     { id: 'demographics', label: 'Demographics' },
     { id: 'geography', label: 'Geography' }
   ];
@@ -43,7 +84,7 @@ function Analytics() {
             </div>
           </div>
         );
-      
+
       case 'platforms':
         return (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -58,7 +99,7 @@ function Analytics() {
                 <PlatformChart data={platformBreakdown} />
               </div>
             </div>
-            
+
             <div className="card">
               <div className="card-header">
                 <div>
@@ -101,7 +142,102 @@ function Analytics() {
             </div>
           </div>
         );
-      
+
+      case 'channels':
+        return (
+          <div className="grid grid-cols-1 gap-6">
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <h3 className="card-title">Channel Waves</h3>
+                  <p className="card-subtitle">Smoothed spend intensity across channels over time</p>
+                </div>
+              </div>
+              <div className="card-content">
+                <ChannelWaveChart
+                  labels={channelWaves.labels}
+                  channels={channelWaves.waves}
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'attribution':
+        return (
+          <div className="grid grid-cols-1 gap-6">
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <h3 className="card-title">Channel Attribution (Simulated)</h3>
+                  <p className="card-subtitle">Relative contribution by channel across attribution models</p>
+                </div>
+              </div>
+              <div className="card-content">
+                <ChannelAttributionChart
+                  models={['First Click', 'Last Click', 'Linear', 'Time Decay', 'Position Based']}
+                  channels={['Search', 'Social', 'Video', 'Display', 'Affiliate']}
+                  baseTotals={{
+                    'First Click': Math.round(mockData.attributionData.firstClick.revenue),
+                    'Last Click': Math.round(mockData.attributionData.lastClick.revenue),
+                    'Linear': Math.round(mockData.attributionData.linear.revenue),
+                    'Time Decay': Math.round(mockData.attributionData.timeDecay.revenue),
+                    'Position Based': Math.round(mockData.attributionData.positionBased.revenue),
+                  }}
+                  mode="revenue"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'model':
+        // Build predicted = smoothed function of spend with noise for demo
+        const labels = timeSeriesData.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        const actual = timeSeriesData.map(d => Math.round(d.revenue));
+        const predicted = timeSeriesData.map((d, i) => {
+          const base = d.spend * 1.8; // assume 1.8x factor for demo
+          const wave = Math.sin((i / timeSeriesData.length) * Math.PI * 2) * 5000;
+          return Math.round(base + wave);
+        });
+
+        // Cluster points for predicted vs actual
+        const clusters = ['High Efficiency', 'Balanced', 'Low Efficiency'];
+        const points = timeSeriesData.map((d, i) => {
+          const actualV = Math.round(d.conversions || (d.clicks * 0.02));
+          const predV = Math.max(0, Math.round(actualV * (0.85 + (i % 5) * 0.04)));
+          const cluster = clusters[i % clusters.length];
+          return { cluster, actual: actualV, predicted: predV };
+        });
+
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <h3 className="card-title">Predicted vs Actual (Time)</h3>
+                  <p className="card-subtitle">Model fit across recent periods</p>
+                </div>
+              </div>
+              <div className="card-content">
+                <ModelFitChart labels={labels} actual={actual} predicted={predicted} />
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <h3 className="card-title">Predicted vs Actual (Clusters)</h3>
+                  <p className="card-subtitle">Cluster trend comparison of predicted and actual</p>
+                </div>
+              </div>
+              <div className="card-content">
+                <PredictedActualClusterChart points={points} />
+              </div>
+            </div>
+          </div>
+        );
+
       case 'demographics':
         return (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -116,7 +252,7 @@ function Analytics() {
                 <DeviceChart data={deviceBreakdown} />
               </div>
             </div>
-            
+
             <div className="card">
               <div className="card-header">
                 <div>
@@ -145,7 +281,7 @@ function Analytics() {
             </div>
           </div>
         );
-      
+
       case 'geography':
         return (
           <div className="grid grid-cols-1 gap-6">
@@ -162,7 +298,7 @@ function Analytics() {
             </div>
           </div>
         );
-      
+
       default:
         return null;
     }
@@ -171,8 +307,8 @@ function Analytics() {
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
+      <div className="border-b border-gray-200 overflow-x-auto">
+        <nav className="-mb-px flex space-x-6 min-w-max">
           {tabs.map((tab) => (
             <button
               key={tab.id}

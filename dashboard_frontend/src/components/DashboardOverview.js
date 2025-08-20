@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import mockData from '../data/mockData';
 import { formatCurrency, formatNumber, formatPercentage } from '../data/dataUtils';
@@ -9,6 +9,7 @@ import CampaignTable from './CampaignTable';
 // PUBLIC_INTERFACE
 function DashboardOverview() {
   const { dashboardSummary, timeSeriesData, platformBreakdown, campaigns } = mockData;
+  const [selectedCard, setSelectedCard] = useState(null);
 
   // PUBLIC_INTERFACE
   const formatMetricChange = (current, previous, isPercentage = false) => {
@@ -90,17 +91,25 @@ function DashboardOverview() {
     <div className="space-y-6">
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {metricCards.map((metric, index) => (
-          <div key={index} className="metric-card">
-            <div className="metric-label">{metric.label}</div>
-            <div className="metric-value">{metric.value}</div>
-            <div className={`metric-change ${metric.change.trend}`}>
-              {getTrendIcon(metric.change.trend)}
-              <span>{metric.change.value}</span>
-              <span className="text-muted">vs last period</span>
-            </div>
-          </div>
-        ))}
+        {metricCards.map((metric, index) => {
+          const isSelected = selectedCard === index;
+          return (
+            <button
+              key={index}
+              className={`metric-card w-full text-left ${isSelected ? 'outline outline-2 outline-blue-500 bg-blue-50' : ''}`}
+              onClick={() => setSelectedCard(isSelected ? null : index)}
+              aria-pressed={isSelected}
+            >
+              <div className="metric-label">{metric.label}</div>
+              <div className="metric-value">{metric.value}</div>
+              <div className={`metric-change ${metric.change.trend}`}>
+                {getTrendIcon(metric.change.trend)}
+                <span>{metric.change.value}</span>
+                <span className="text-muted">vs last period</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {/* Charts Section */}

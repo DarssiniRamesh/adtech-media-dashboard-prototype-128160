@@ -13,12 +13,13 @@ import {
   ChevronRight,
   Activity,
   HelpCircle,
-  LogOut
+  LogOut,
+  SlidersHorizontal
 } from 'lucide-react';
 
 // PUBLIC_INTERFACE
 function Sidebar({ currentView, setCurrentView, isOpen, onClose }) {
-  const [expandedSections, setExpandedSections] = useState(['Main', 'Insights']);
+  const [expandedSections, setExpandedSections] = useState(['Main', 'Insights', 'Planning']);
 
   const navigationItems = [
     {
@@ -37,6 +38,12 @@ function Sidebar({ currentView, setCurrentView, isOpen, onClose }) {
         { id: 'geography', label: 'Geography', icon: Globe, description: 'Geographic performance' },
         { id: 'devices', label: 'Devices', icon: Smartphone, description: 'Device analytics' },
         { id: 'creatives', label: 'Creatives', icon: Eye, description: 'Creative performance' }
+      ]
+    },
+    {
+      section: 'Planning',
+      items: [
+        { id: 'planner', label: 'Scenario Planner', icon: SlidersHorizontal, description: 'Plan and simulate scenarios' }
       ]
     }
   ];

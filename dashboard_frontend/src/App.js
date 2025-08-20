@@ -12,13 +12,16 @@ import Audiences from './components/Audiences';
 import Geography from './components/Geography';
 import Devices from './components/Devices';
 import Creatives from './components/Creatives';
+import ScenarioPlanner from './components/ScenarioPlanner';
 
 // PUBLIC_INTERFACE
 function App() {
+  /** Root view selection (no router for simplicity). */
   const [currentView, setCurrentView] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // PUBLIC_INTERFACE
+  /** Render the view component for the current selection. */
   const renderCurrentView = () => {
     switch (currentView) {
       case 'overview':
@@ -37,12 +40,15 @@ function App() {
         return <Devices />;
       case 'creatives':
         return <Creatives />;
+      case 'planner':
+        return <ScenarioPlanner />;
       default:
         return <DashboardOverview />;
     }
   };
 
   // PUBLIC_INTERFACE
+  /** Map current view key to title. */
   const getViewTitle = () => {
     switch (currentView) {
       case 'overview':
@@ -61,12 +67,15 @@ function App() {
         return 'Device Analytics';
       case 'creatives':
         return 'Creative Performance';
+      case 'planner':
+        return 'Scenario Planner';
       default:
         return 'Dashboard Overview';
     }
   };
 
   // PUBLIC_INTERFACE
+  /** Map current view key to subtitle text. */
   const getViewSubtitle = () => {
     switch (currentView) {
       case 'overview':
@@ -85,6 +94,8 @@ function App() {
         return 'Device-specific performance metrics and trends';
       case 'creatives':
         return 'Creative asset performance and optimization';
+      case 'planner':
+        return 'Plan scenarios and project outcomes with real-time simulation';
       default:
         return 'Media performance insights and key metrics at a glance';
     }
@@ -92,20 +103,20 @@ function App() {
 
   return (
     <div className="dashboard-container">
-      <Sidebar 
+      <Sidebar
         currentView={currentView}
         setCurrentView={setCurrentView}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
-      
+
       <div className="main-content">
-        <Header 
+        <Header
           title={getViewTitle()}
           subtitle={getViewSubtitle()}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         />
-        
+
         <main className="dashboard-content">
           {renderCurrentView()}
         </main>

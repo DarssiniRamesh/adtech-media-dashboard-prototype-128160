@@ -13,6 +13,8 @@ import Geography from './components/Geography';
 import Devices from './components/Devices';
 import Creatives from './components/Creatives';
 import ScenarioPlanner from './components/ScenarioPlanner';
+import Help from './components/Help';
+import Settings from './components/Settings';
 
 // PUBLIC_INTERFACE
 function App() {
@@ -65,6 +67,10 @@ function App() {
         return <Creatives />;
       case 'planner':
         return <ScenarioPlanner />;
+      case 'help':
+        return <Help />;
+      case 'settings':
+        return <Settings />;
       default:
         return <DashboardOverview />;
     }
@@ -92,6 +98,10 @@ function App() {
         return 'Creative Performance';
       case 'planner':
         return 'Scenario Planner';
+      case 'help':
+        return 'Help & Support';
+      case 'settings':
+        return 'Settings';
       default:
         return 'Dashboard Overview';
     }
@@ -119,6 +129,10 @@ function App() {
         return 'Creative asset performance and optimization';
       case 'planner':
         return 'Plan scenarios and project outcomes with real-time simulation';
+      case 'help':
+        return 'FAQs, tips, and how to use this dashboard effectively';
+      case 'settings':
+        return 'Customize your dashboard experience and preferences';
       default:
         return 'Media performance insights and key metrics at a glance';
     }

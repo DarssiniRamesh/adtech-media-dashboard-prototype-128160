@@ -175,12 +175,22 @@ function Sidebar({ currentView, setCurrentView, isOpen, onClose }) {
         {/* Sidebar Footer */}
         <div className="sidebar-footer">
           <div className="sidebar-footer-content">
-            <button className="nav-item" title="Help & Support">
+            <button
+              className="nav-item"
+              title="Help & Support"
+              onClick={() => handleItemClick('help')}
+              aria-label="Open Help & Support"
+            >
               <HelpCircle className="nav-item-icon" size={16} />
               <span>Help</span>
             </button>
             
-            <button className="nav-item" title="Settings">
+            <button
+              className="nav-item"
+              title="Settings"
+              onClick={() => handleItemClick('settings')}
+              aria-label="Open Settings"
+            >
               <Settings className="nav-item-icon" size={16} />
               <span>Settings</span>
             </button>
